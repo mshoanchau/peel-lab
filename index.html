@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PEEL Lab</title></head>
+<body style="margin:0;background:#F6F5FB;font-family:system-ui,-apple-system,sans-serif;color:#6B6880;display:flex;align-items:center;justify-content:center;min-height:100vh">
+<p id="msg">Đang tải PEEL Lab…</p>
+<script>
+/* Trang nạp PEEL Lab — gọi dữ liệu từ Google Apps Script mà không dùng tài khoản Google của trình duyệt
+   (tránh lỗi “Sorry, unable to open the file” khi Chrome đăng nhập nhiều tài khoản). */
+var API="https://script.google.com/macros/s/AKfycbxR0S7Q8Cg4zZ0a0jAHuZo6pClp306i1edjvOqhwxAgz7gN2kjakokqQQwN49DcrYw/exec";
+var bai=new URLSearchParams(location.search).get("bai")||"L1";
+fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:"api_app",args:[bai]})})
+ .then(function(r){return r.json()})
+ .then(function(j){if(!j.ok)throw new Error(j.error);document.open();document.write(j.data);document.close()})
+ .catch(function(e){document.getElementById("msg").textContent="Chưa tải được PEEL Lab ("+e.message+"). Kiểm tra mạng rồi tải lại trang."});
+</script></body></html>
