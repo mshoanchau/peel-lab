@@ -5,8 +5,13 @@
 <script>
 /* Trang nạp PEEL Lab — gọi dữ liệu từ Google Apps Script mà không dùng tài khoản Google của trình duyệt
    (tránh lỗi “Sorry, unable to open the file” khi Chrome đăng nhập nhiều tài khoản). */
-var API="https://script.google.com/macros/s/AKfycbxR0S7Q8Cg4zZ0a0jAHuZo6pClp306i1edjvOqhwxAgz7gN2kjakokqQQwN49DcrYw/exec";
+/* Mỗi khoá 1 máy chủ riêng — chọn theo đầu mã bài (bai=). Khoá mới: thêm 1 dòng vào SERVERS. */
+var SERVERS={
+  "W35":"https://script.google.com/macros/s/AKfycbyBa49UY1c3SYoaKApL22Yw4mrKISimdUCRFZmbRH32JQZ65TY4x5IfeLb-Tl6ZYEOF/exec"  /* Pre-IELTS 3.5 Writing */
+};
+var DEFAULT_API="https://script.google.com/macros/s/AKfycbxR0S7Q8Cg4zZ0a0jAHuZo6pClp306i1edjvOqhwxAgz7gN2kjakokqQQwN49DcrYw/exec"; /* 6.5 (PEEL Lab + Reading Lab) */
 var bai=new URLSearchParams(location.search).get("bai")||"L1";
+var API=DEFAULT_API;Object.keys(SERVERS).forEach(function(p){if(bai.indexOf(p)===0)API=SERVERS[p]});
 fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({fn:"api_app",args:[bai]})})
  .then(function(r){return r.json()})
  .then(function(j){if(!j.ok)throw new Error(j.error);document.open();document.write(j.data);document.close()})
